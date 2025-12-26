@@ -44,10 +44,9 @@ export const Footer = () => {
             href="https://x.com/snowgift"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
+            className="text-muted-foreground hover:text-foreground transition-colors"
           >
-            <XIcon className="w-3 h-3" />
-            X
+            <XIcon className="w-4 h-4" />
           </a>
         </div>
 
