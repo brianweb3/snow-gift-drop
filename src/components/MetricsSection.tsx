@@ -1,12 +1,10 @@
-import { Coins, Send, Wallet, Users, TrendingUp, Target } from 'lucide-react';
+import { Send, Wallet, Users, TrendingUp } from 'lucide-react';
 
 export interface ProtocolStats {
-  totalSolDistributed: string;
   totalRewardsSent: string;
   currentRewardPool: string;
   totalUniqueWinners: string;
   currentMarketCap: string;
-  untilNextGift: string;
 }
 
 interface MetricsSectionProps {
@@ -14,12 +12,10 @@ interface MetricsSectionProps {
 }
 
 const DEFAULT_STATS: ProtocolStats = {
-  totalSolDistributed: "0 SOL",
   totalRewardsSent: "0",
   currentRewardPool: "0 SOL",
   totalUniqueWinners: "0",
   currentMarketCap: "$0",
-  untilNextGift: "$50k",
 };
 
 export const MetricsSection = ({ stats = DEFAULT_STATS }: MetricsSectionProps) => {
@@ -27,10 +23,8 @@ export const MetricsSection = ({ stats = DEFAULT_STATS }: MetricsSectionProps) =
   
   const metrics = [
     { icon: TrendingUp, label: "Current Market Cap", value: safeStats.currentMarketCap },
-    { icon: Target, label: "Until Next Gift", value: safeStats.untilNextGift },
-    { icon: Coins, label: "Total SOL Distributed", value: safeStats.totalSolDistributed },
-    { icon: Send, label: "Total Rewards Sent", value: safeStats.totalRewardsSent },
     { icon: Wallet, label: "Current Reward Pool", value: safeStats.currentRewardPool },
+    { icon: Send, label: "Total Rewards Sent", value: safeStats.totalRewardsSent },
     { icon: Users, label: "Total Unique Winners", value: safeStats.totalUniqueWinners },
   ];
 
@@ -41,7 +35,7 @@ export const MetricsSection = ({ stats = DEFAULT_STATS }: MetricsSectionProps) =
           Protocol Stats
         </h2>
         
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {metrics.map((metric, index) => (
             <div key={index} className="glass rounded-xl p-4 text-center">
               <metric.icon className="w-5 h-5 text-primary mx-auto mb-2" strokeWidth={1.5} />

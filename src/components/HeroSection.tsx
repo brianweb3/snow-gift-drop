@@ -1,4 +1,4 @@
-import { Wallet, Copy, Coins, Send, Users, TrendingUp, Target } from 'lucide-react';
+import { Wallet, Copy, Coins, Send, Users, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { SnowGlobe } from './SnowGlobe';
 import { toast } from '@/hooks/use-toast';
@@ -22,12 +22,10 @@ const XIcon = ({ className }: { className?: string }) => (
 );
 
 const DEFAULT_STATS: ProtocolStats = {
-  totalSolDistributed: "0 SOL",
   totalRewardsSent: "0",
   currentRewardPool: "0 SOL",
   totalUniqueWinners: "0",
   currentMarketCap: "$0",
-  untilNextGift: "$50k",
 };
 
 export const HeroSection = ({ isConnected, isConnecting, onConnectWallet, onDisconnect, stats = DEFAULT_STATS }: HeroSectionProps) => {
@@ -42,8 +40,7 @@ export const HeroSection = ({ isConnected, isConnecting, onConnectWallet, onDisc
 
   const metrics = [
     { icon: TrendingUp, label: "Market Cap", value: safeStats.currentMarketCap },
-    { icon: Target, label: "Until Gift", value: safeStats.untilNextGift },
-    { icon: Coins, label: "Distributed", value: safeStats.totalSolDistributed },
+    { icon: Coins, label: "Reward Pool", value: safeStats.currentRewardPool },
     { icon: Send, label: "Rewards Sent", value: safeStats.totalRewardsSent },
     { icon: Users, label: "Winners", value: safeStats.totalUniqueWinners },
   ];
@@ -65,7 +62,7 @@ export const HeroSection = ({ isConnected, isConnecting, onConnectWallet, onDisc
         </div>
 
         {/* Protocol Stats */}
-        <div className="grid grid-cols-3 md:grid-cols-5 gap-2 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-8">
           {metrics.map((metric, index) => (
             <div key={index} className="glass rounded-lg p-2 md:p-3 text-center">
               <metric.icon className="w-4 h-4 text-primary mx-auto mb-1" strokeWidth={1.5} />
