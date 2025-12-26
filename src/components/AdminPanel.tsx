@@ -115,25 +115,16 @@ export const AdminPanel = ({
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] text-muted-foreground mb-1 block">Until Next Gift</label>
+                  <label className="text-[10px] text-muted-foreground mb-1 block">Reward Pool</label>
                   <Input
-                    value={localStats.untilNextGift}
-                    onChange={(e) => handleStatsChange('untilNextGift', e.target.value)}
-                    className="h-8 text-xs"
-                    placeholder="$50k"
-                  />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="text-[10px] text-muted-foreground mb-1 block">Total SOL Distributed</label>
-                  <Input
-                    value={localStats.totalSolDistributed}
-                    onChange={(e) => handleStatsChange('totalSolDistributed', e.target.value)}
+                    value={localStats.currentRewardPool}
+                    onChange={(e) => handleStatsChange('currentRewardPool', e.target.value)}
                     className="h-8 text-xs"
                     placeholder="0 SOL"
                   />
                 </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
                 <div>
                   <label className="text-[10px] text-muted-foreground mb-1 block">Total Rewards Sent</label>
                   <Input
@@ -141,17 +132,6 @@ export const AdminPanel = ({
                     onChange={(e) => handleStatsChange('totalRewardsSent', e.target.value)}
                     className="h-8 text-xs"
                     placeholder="0"
-                  />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="text-[10px] text-muted-foreground mb-1 block">Current Reward Pool</label>
-                  <Input
-                    value={localStats.currentRewardPool}
-                    onChange={(e) => handleStatsChange('currentRewardPool', e.target.value)}
-                    className="h-8 text-xs"
-                    placeholder="0 SOL"
                   />
                 </div>
                 <div>

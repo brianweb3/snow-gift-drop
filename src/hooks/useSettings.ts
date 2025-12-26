@@ -14,12 +14,10 @@ const DEFAULT_MILESTONES: Milestone[] = [
 ];
 
 const DEFAULT_STATS: ProtocolStats = {
-  totalSolDistributed: "0 SOL",
   totalRewardsSent: "0",
   currentRewardPool: "0 SOL",
   totalUniqueWinners: "0",
   currentMarketCap: "$0",
-  untilNextGift: "$50k",
 };
 
 export const useSettings = () => {
