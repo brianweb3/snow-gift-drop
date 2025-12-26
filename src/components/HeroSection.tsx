@@ -76,7 +76,7 @@ export const HeroSection = ({ isConnected, isConnecting, walletAddress, onConnec
 
           {/* Milestones - Right */}
           {safeMilestones.length > 0 && (
-            <div className="w-full md:w-auto">
+            <div className="w-full md:w-72 lg:w-80">
               <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-3 text-center md:text-left">
                 Reward Milestones
               </p>
@@ -85,7 +85,7 @@ export const HeroSection = ({ isConnected, isConnecting, walletAddress, onConnec
                   <div
                     key={milestone.id}
                     className={`
-                      flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all
+                      flex items-center gap-3 px-5 py-3 rounded-xl transition-all
                       ${milestone.completed 
                         ? 'bg-primary/10 border border-primary/30' 
                         : 'glass'
@@ -93,24 +93,24 @@ export const HeroSection = ({ isConnected, isConnecting, walletAddress, onConnec
                     `}
                   >
                     <div className={`
-                      w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0
+                      w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0
                       ${milestone.completed 
                         ? 'bg-primary text-primary-foreground' 
                         : 'bg-muted text-muted-foreground'
                       }
                     `}>
                       {milestone.completed ? (
-                        <Check className="w-3 h-3" />
+                        <Check className="w-3.5 h-3.5" />
                       ) : (
-                        <Lock className="w-2.5 h-2.5" />
+                        <Lock className="w-3 h-3" />
                       )}
                     </div>
-                    <div className="text-left">
+                    <div className="text-left flex-1">
                       <p className={`text-sm font-medium ${milestone.completed ? 'text-foreground' : 'text-muted-foreground'}`}>
                         {milestone.cap}
                       </p>
                       <p className="text-[10px] text-muted-foreground">
-                        {milestone.reward}
+                        Reward: {milestone.reward}
                       </p>
                     </div>
                   </div>
