@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { SnowfallAnimation } from '@/components/SnowfallAnimation';
 import { HeroSection } from '@/components/HeroSection';
 import { WalletSection } from '@/components/WalletSection';
@@ -6,13 +6,37 @@ import { HoldersPool } from '@/components/HoldersPool';
 import { RewardMilestones } from '@/components/RewardMilestones';
 import { MetricsSection } from '@/components/MetricsSection';
 import { Footer } from '@/components/Footer';
+import { AdminPanel, type Milestone } from '@/components/AdminPanel';
+
+const DEFAULT_MILESTONES: Milestone[] = [
+  { id: '1', cap: "$50k", reward: "0.5 SOL", completed: true },
+  { id: '2', cap: "$150k", reward: "1 SOL", completed: false },
+  { id: '3', cap: "$300k", reward: "2 SOL", completed: false },
+  { id: '4', cap: "$500k", reward: "3 SOL", completed: false },
+  { id: '5', cap: "$1M", reward: "5 SOL", completed: false },
+  { id: '6', cap: "$5M", reward: "10 SOL", completed: false },
+];
 
 const Index = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [walletAddress, setWalletAddress] = useState("");
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [milestones, setMilestones] = useState<Milestone[]>(DEFAULT_MILESTONES);
+
+  // Keyboard shortcut: Ctrl+Shift+A
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+      e.preventDefault();
+      setIsAdminOpen(prev => !prev);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
 
   const handleConnectWallet = () => {
-    // Mock wallet connection
     if (!isConnected) {
       const mockAddress = "8xKqwerty1234567890abcdef4nRt";
       setWalletAddress(mockAddress);
@@ -42,12 +66,20 @@ const Index = () => {
         
         <HoldersPool connectedWallet={isConnected ? walletAddress : null} />
         
-        <RewardMilestones />
+        <RewardMilestones milestones={milestones} />
         
         <MetricsSection />
         
         <Footer />
       </main>
+
+      {/* Hidden Admin Panel */}
+      <AdminPanel
+        isOpen={isAdminOpen}
+        onClose={() => setIsAdminOpen(false)}
+        milestones={milestones}
+        onUpdateMilestones={setMilestones}
+      />
     </div>
   );
 };

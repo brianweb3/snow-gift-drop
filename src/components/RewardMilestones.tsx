@@ -1,21 +1,11 @@
 import { Check, Lock, Gift, Sparkles } from 'lucide-react';
+import type { Milestone } from './AdminPanel';
 
-interface Milestone {
-  cap: string;
-  reward: string;
-  completed: boolean;
+interface RewardMilestonesProps {
+  milestones: Milestone[];
 }
 
-const MILESTONES: Milestone[] = [
-  { cap: "$50k", reward: "0.5 SOL", completed: true },
-  { cap: "$150k", reward: "1 SOL", completed: false },
-  { cap: "$300k", reward: "2 SOL", completed: false },
-  { cap: "$500k", reward: "3 SOL", completed: false },
-  { cap: "$1M", reward: "5 SOL", completed: false },
-  { cap: "$5M", reward: "10 SOL", completed: false },
-];
-
-export const RewardMilestones = () => {
+export const RewardMilestones = ({ milestones }: RewardMilestonesProps) => {
   return (
     <section className="py-8 px-4">
       <div className="max-w-lg mx-auto">
@@ -24,9 +14,9 @@ export const RewardMilestones = () => {
         </h2>
         
         <div className="space-y-3">
-          {MILESTONES.map((milestone, index) => (
+          {milestones.map((milestone, index) => (
             <div
-              key={index}
+              key={milestone.id}
               className={`
                 glass rounded-xl p-4 transition-all duration-300
                 ${milestone.completed ? 'border-primary/30 bg-primary/5' : 'opacity-80'}
