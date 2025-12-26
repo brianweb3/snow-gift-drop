@@ -17,25 +17,26 @@ interface AdminPanelProps {
   isOpen: boolean;
   onClose: () => void;
   milestones: Milestone[];
-  onUpdateMilestones: (milestones: Milestone[]) => void;
   stats: ProtocolStats;
-  onUpdateStats: (stats: ProtocolStats) => void;
+  onSave: (milestones: Milestone[], stats: ProtocolStats) => Promise<boolean>;
 }
 
 export const AdminPanel = ({ 
   isOpen, 
   onClose, 
   milestones, 
-  onUpdateMilestones,
   stats,
-  onUpdateStats
+  onSave
 }: AdminPanelProps) => {
   const [localMilestones, setLocalMilestones] = useState<Milestone[]>(milestones);
   const [localStats, setLocalStats] = useState<ProtocolStats>(stats);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
-    setLocalMilestones(milestones);
-    setLocalStats(stats);
+    if (isOpen) {
+      setLocalMilestones(milestones);
+      setLocalStats(stats);
+    }
   }, [milestones, stats, isOpen]);
 
   const handleMilestoneChange = (id: string, field: keyof Milestone, value: string | boolean) => {
@@ -62,12 +63,21 @@ export const AdminPanel = ({
     setLocalMilestones(prev => prev.filter(m => m.id !== id));
   };
 
-  const handleSave = () => {
-    onUpdateMilestones(localMilestones);
-    onUpdateStats(localStats);
-    toast({
-      description: "Settings updated successfully!",
-    });
+  const handleSave = async () => {
+    setIsSaving(true);
+    const success = await onSave(localMilestones, localStats);
+    setIsSaving(false);
+    
+    if (success) {
+      toast({
+        description: "Settings saved and synced to all users!",
+      });
+    } else {
+      toast({
+        description: "Failed to save settings",
+        variant: "destructive",
+      });
+    }
   };
 
   if (!isOpen) return null;
@@ -80,6 +90,7 @@ export const AdminPanel = ({
           <div className="flex items-center gap-2">
             <Settings className="w-4 h-4 text-primary" />
             <h2 className="text-sm font-medium text-foreground">Admin Panel</h2>
+            <span className="text-[10px] text-muted-foreground">(synced to all users)</span>
           </div>
           <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0">
             <X className="w-4 h-4" />
@@ -197,9 +208,9 @@ export const AdminPanel = ({
 
         {/* Footer */}
         <div className="p-4 border-t border-border">
-          <Button onClick={handleSave} className="w-full gap-2">
+          <Button onClick={handleSave} className="w-full gap-2" disabled={isSaving}>
             <Save className="w-4 h-4" />
-            Save Changes
+            {isSaving ? 'Saving...' : 'Save & Sync to All Users'}
           </Button>
         </div>
       </div>
