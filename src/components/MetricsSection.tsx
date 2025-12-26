@@ -5,6 +5,7 @@ export interface ProtocolStats {
   currentRewardPool: string;
   totalUniqueWinners: string;
   currentMarketCap: string;
+  nextGiftAt: string;
 }
 
 interface MetricsSectionProps {
@@ -16,6 +17,7 @@ const DEFAULT_STATS: ProtocolStats = {
   currentRewardPool: "0 SOL",
   totalUniqueWinners: "0",
   currentMarketCap: "$0",
+  nextGiftAt: "$50k Market Cap",
 };
 
 export const MetricsSection = ({ stats = DEFAULT_STATS }: MetricsSectionProps) => {

@@ -26,6 +26,7 @@ const DEFAULT_STATS: ProtocolStats = {
   currentRewardPool: "0 SOL",
   totalUniqueWinners: "0",
   currentMarketCap: "$0",
+  nextGiftAt: "$50k Market Cap",
 };
 
 export const HeroSection = ({ isConnected, isConnecting, onConnectWallet, onDisconnect, stats = DEFAULT_STATS }: HeroSectionProps) => {
@@ -50,7 +51,7 @@ export const HeroSection = ({ isConnected, isConnecting, onConnectWallet, onDisc
       <div className="max-w-2xl mx-auto text-center">
         {/* Title */}
         <h1 className="text-3xl md:text-4xl font-light text-foreground mb-2">
-          SNOW GIFT
+          SNOW GIFT PROTOCOL
         </h1>
         <p className="text-sm text-muted-foreground mb-8 md:mb-12">
           Winter rewards for diamond hands
@@ -58,7 +59,7 @@ export const HeroSection = ({ isConnected, isConnecting, onConnectWallet, onDisc
 
         {/* Snow Globe */}
         <div className="mb-6">
-          <SnowGlobe />
+          <SnowGlobe nextGiftAt={safeStats.nextGiftAt} />
         </div>
 
         {/* Protocol Stats */}
