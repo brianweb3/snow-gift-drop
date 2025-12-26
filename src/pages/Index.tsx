@@ -72,12 +72,16 @@ const Index = () => {
           isEligible={balance > 0}
         />
         
-        <HoldersPool 
-          wallets={wallets} 
-          connectedWallet={publicKey} 
-        />
-        
-        <WinnersPanel />
+        {/* Two columns: Holders Pool + Winners */}
+        <section className="py-8 px-4">
+          <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
+            <HoldersPool 
+              wallets={wallets} 
+              connectedWallet={publicKey} 
+            />
+            <WinnersPanel />
+          </div>
+        </section>
         
         <RewardMilestones milestones={milestones} />
         
