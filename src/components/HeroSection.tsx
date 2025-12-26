@@ -1,7 +1,6 @@
-import { Wallet, Copy, ExternalLink } from 'lucide-react';
+import { Wallet, Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { SnowGlobe } from './SnowGlobe';
-import { CountdownTimer } from './CountdownTimer';
 import { toast } from '@/hooks/use-toast';
 
 interface HeroSectionProps {
@@ -10,6 +9,13 @@ interface HeroSectionProps {
 }
 
 const CONTRACT_ADDRESS = "SNOWgift...1234abcd";
+
+// X (Twitter) Icon
+const XIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </svg>
+);
 
 export const HeroSection = ({ isConnected, onConnectWallet }: HeroSectionProps) => {
   const copyContract = () => {
@@ -31,16 +37,8 @@ export const HeroSection = ({ isConnected, onConnectWallet }: HeroSectionProps) 
         </p>
 
         {/* Snow Globe */}
-        <div className="mb-8 md:mb-12">
+        <div className="mb-10 md:mb-14">
           <SnowGlobe />
-        </div>
-
-        {/* Countdown */}
-        <div className="mb-8 md:mb-10">
-          <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wider">
-            Next Reward Drop
-          </p>
-          <CountdownTimer />
         </div>
 
         {/* Buttons */}
@@ -68,9 +66,9 @@ export const HeroSection = ({ isConnected, onConnectWallet }: HeroSectionProps) 
             asChild
             className="w-full sm:w-auto gap-2"
           >
-            <a href="https://twitter.com/snowgift" target="_blank" rel="noopener noreferrer">
-              <ExternalLink className="w-4 h-4" />
-              Twitter
+            <a href="https://x.com/snowgift" target="_blank" rel="noopener noreferrer">
+              <XIcon className="w-4 h-4" />
+              X
             </a>
           </Button>
         </div>
