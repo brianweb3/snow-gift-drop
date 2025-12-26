@@ -29,7 +29,7 @@ export const useSettings = () => {
   const [stats, setStats] = useState<ProtocolStats>(DEFAULT_STATS);
   const [contractAddress, setContractAddress] = useState<string>(DEFAULT_CONTRACT_ADDRESS);
   const [isLoading, setIsLoading] = useState(true);
-  const { marketCap: realTimeMarketCap } = usePumpfunMarketCap(contractAddress);
+  const { marketCap: realTimeMarketCap, totalFees: realTimeTotalFees } = usePumpfunMarketCap(contractAddress);
 
   const fetchSettings = useCallback(async () => {
     console.log('Fetching settings from database...');
@@ -53,10 +53,11 @@ export const useSettings = () => {
       
       setMilestones(milestonesData || DEFAULT_MILESTONES);
       setContractAddress(data.contract_address || DEFAULT_CONTRACT_ADDRESS);
-      // Use real-time market cap if available, otherwise use DB value
+      // Use real-time market cap and reward pool if available, otherwise use DB value
       setStats({
         ...(statsData || DEFAULT_STATS),
         currentMarketCap: realTimeMarketCap || statsData?.currentMarketCap || DEFAULT_STATS.currentMarketCap,
+        currentRewardPool: realTimeTotalFees || statsData?.currentRewardPool || DEFAULT_STATS.currentRewardPool,
       });
     } else {
       // No data in DB, use defaults
@@ -128,10 +129,11 @@ export const useSettings = () => {
           }
           if (newData.stats) {
             const updatedStats = newData.stats as unknown as ProtocolStats;
-            // Keep the real-time market cap, don't overwrite it with DB value
+            // Keep the real-time market cap and reward pool, don't overwrite with DB values
             setStats({
               ...updatedStats,
               currentMarketCap: realTimeMarketCap || updatedStats.currentMarketCap,
+              currentRewardPool: realTimeTotalFees || updatedStats.currentRewardPool,
             });
           }
         }
@@ -142,17 +144,18 @@ export const useSettings = () => {
       console.log('Removing settings realtime subscription');
       supabase.removeChannel(channel);
     };
-  }, [realTimeMarketCap]);
+  }, [realTimeMarketCap, realTimeTotalFees]);
 
-  // Update stats with real-time market cap
+  // Update stats with real-time market cap and reward pool
   useEffect(() => {
-    if (realTimeMarketCap) {
+    if (realTimeMarketCap || realTimeTotalFees) {
       setStats(prevStats => ({
         ...prevStats,
-        currentMarketCap: realTimeMarketCap,
+        ...(realTimeMarketCap && { currentMarketCap: realTimeMarketCap }),
+        ...(realTimeTotalFees && { currentRewardPool: realTimeTotalFees }),
       }));
     }
-  }, [realTimeMarketCap]);
+  }, [realTimeMarketCap, realTimeTotalFees]);
 
   return {
     milestones,

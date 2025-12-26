@@ -59,8 +59,8 @@ export const AdminPanel = ({
   };
 
   const handleStatsChange = (field: keyof ProtocolStats, value: string) => {
-    // Prevent manual changes to currentMarketCap as it's auto-updated
-    if (field === 'currentMarketCap') {
+    // Prevent manual changes to currentMarketCap and currentRewardPool as they're auto-updated
+    if (field === 'currentMarketCap' || field === 'currentRewardPool') {
       return;
     }
     setLocalStats(prev => ({ ...prev, [field]: value }));
@@ -145,12 +145,16 @@ export const AdminPanel = ({
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] text-muted-foreground mb-1 block">Reward Pool</label>
+                  <label className="text-[10px] text-muted-foreground mb-1 block">
+                    Reward Pool (Auto-updated from Pump.fun fees)
+                  </label>
                   <Input
                     value={localStats.currentRewardPool}
                     onChange={(e) => handleStatsChange('currentRewardPool', e.target.value)}
-                    className="h-8 text-xs"
+                    className="h-8 text-xs bg-muted/50"
                     placeholder="0 SOL"
+                    disabled
+                    title="Reward pool is automatically updated from Pump.fun fees in real-time"
                   />
                 </div>
               </div>
