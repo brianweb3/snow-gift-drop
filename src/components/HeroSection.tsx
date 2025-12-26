@@ -7,6 +7,7 @@ import type { ProtocolStats } from './MetricsSection';
 interface HeroSectionProps {
   isConnected: boolean;
   isConnecting: boolean;
+  walletAddress: string | null;
   onConnectWallet: () => void;
   onDisconnect: () => void;
   stats?: ProtocolStats;
@@ -29,8 +30,12 @@ const DEFAULT_STATS: ProtocolStats = {
   nextGiftAt: "$50k Market Cap",
 };
 
-export const HeroSection = ({ isConnected, isConnecting, onConnectWallet, onDisconnect, stats = DEFAULT_STATS }: HeroSectionProps) => {
+export const HeroSection = ({ isConnected, isConnecting, walletAddress, onConnectWallet, onDisconnect, stats = DEFAULT_STATS }: HeroSectionProps) => {
   const safeStats = stats || DEFAULT_STATS;
+  
+  const formatAddress = (address: string) => {
+    return `${address.slice(0, 4)}...${address.slice(-4)}`;
+  };
   
   const copyContract = () => {
     navigator.clipboard.writeText(CONTRACT_ADDRESS);
@@ -86,7 +91,11 @@ export const HeroSection = ({ isConnected, isConnecting, onConnectWallet, onDisc
             disabled={isConnecting}
           >
             <Wallet className="w-4 h-4" />
-            {isConnecting ? "Connecting..." : isConnected ? "Disconnect" : "Connect Wallet"}
+            {isConnecting 
+              ? "Connecting..." 
+              : isConnected && walletAddress 
+                ? formatAddress(walletAddress) 
+                : "Connect Wallet"}
           </Button>
           
           <Button

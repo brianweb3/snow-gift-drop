@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { SnowfallAnimation } from '@/components/SnowfallAnimation';
 import { HeroSection } from '@/components/HeroSection';
-import { WalletSection } from '@/components/WalletSection';
+
 import { HoldersPool } from '@/components/HoldersPool';
 import { RewardMilestones } from '@/components/RewardMilestones';
 import { WinnersPanel } from '@/components/WinnersPanel';
@@ -60,16 +60,10 @@ const Index = () => {
         <HeroSection 
           isConnected={connected}
           isConnecting={connecting}
+          walletAddress={publicKey}
           onConnectWallet={connect}
           onDisconnect={disconnect}
           stats={stats}
-        />
-        
-        <WalletSection
-          isConnected={connected}
-          walletAddress={publicKey || ""}
-          balance={balance}
-          isEligible={balance > 0}
         />
         
         {/* Two columns: Holders Pool + Winners */}
