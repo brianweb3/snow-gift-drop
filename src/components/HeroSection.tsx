@@ -56,22 +56,72 @@ export const HeroSection = ({ isConnected, isConnecting, walletAddress, onConnec
 
   return (
     <section className="relative py-12 md:py-20 px-4">
-      <div className="max-w-2xl mx-auto text-center">
+      <div className="max-w-4xl mx-auto">
         {/* Title */}
-        <h1 className="text-3xl md:text-4xl font-light text-foreground mb-2">
-          SNOW GIFT PROTOCOL
-        </h1>
-        <p className="text-sm text-muted-foreground mb-8 md:mb-12">
-          Winter rewards for diamond hands
-        </p>
+        <div className="text-center mb-8 md:mb-12">
+          <h1 className="text-3xl md:text-4xl font-light text-foreground mb-2">
+            SNOW GIFT PROTOCOL
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Winter rewards for diamond hands
+          </p>
+        </div>
 
-        {/* Snow Globe */}
-        <div className="mb-6">
-          <SnowGlobe nextGiftAt={safeStats.nextGiftAt} />
+        {/* Snow Globe + Milestones Layout */}
+        <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 mb-8">
+          {/* Snow Globe - Left */}
+          <div className="flex-shrink-0">
+            <SnowGlobe nextGiftAt={safeStats.nextGiftAt} />
+          </div>
+
+          {/* Milestones - Right */}
+          {safeMilestones.length > 0 && (
+            <div className="w-full md:w-auto">
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-3 text-center md:text-left">
+                Reward Milestones
+              </p>
+              <div className="space-y-2">
+                {safeMilestones.map((milestone) => (
+                  <div
+                    key={milestone.id}
+                    className={`
+                      flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all
+                      ${milestone.completed 
+                        ? 'bg-primary/10 border border-primary/30' 
+                        : 'glass'
+                      }
+                    `}
+                  >
+                    <div className={`
+                      w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0
+                      ${milestone.completed 
+                        ? 'bg-primary text-primary-foreground' 
+                        : 'bg-muted text-muted-foreground'
+                      }
+                    `}>
+                      {milestone.completed ? (
+                        <Check className="w-3 h-3" />
+                      ) : (
+                        <Lock className="w-2.5 h-2.5" />
+                      )}
+                    </div>
+                    <div className="text-left">
+                      <p className={`text-sm font-medium ${milestone.completed ? 'text-foreground' : 'text-muted-foreground'}`}>
+                        {milestone.cap}
+                      </p>
+                      <p className="text-[10px] text-muted-foreground">
+                        {milestone.reward}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Protocol Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-8 max-w-2xl mx-auto">
           {metrics.map((metric, index) => (
             <div key={index} className="glass rounded-lg p-2 md:p-3 text-center">
               <metric.icon className="w-4 h-4 text-primary mx-auto mb-1" strokeWidth={1.5} />
@@ -84,35 +134,6 @@ export const HeroSection = ({ isConnected, isConnecting, walletAddress, onConnec
             </div>
           ))}
         </div>
-
-        {/* Reward Milestones - Horizontal Progress */}
-        {safeMilestones.length > 0 && (
-          <div className="mb-8">
-            <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-3">Reward Milestones</p>
-            <div className="flex items-center justify-center gap-1 md:gap-2 flex-wrap">
-              {safeMilestones.map((milestone, index) => (
-                <div
-                  key={milestone.id}
-                  className={`
-                    flex items-center gap-1 px-2 py-1 md:px-3 md:py-1.5 rounded-full text-[10px] md:text-xs transition-all
-                    ${milestone.completed 
-                      ? 'bg-primary text-primary-foreground' 
-                      : 'glass text-muted-foreground'
-                    }
-                  `}
-                >
-                  {milestone.completed ? (
-                    <Check className="w-3 h-3" />
-                  ) : (
-                    <Lock className="w-2.5 h-2.5" />
-                  )}
-                  <span className="font-medium">{milestone.cap}</span>
-                  <span className="hidden md:inline opacity-70">→ {milestone.reward}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
