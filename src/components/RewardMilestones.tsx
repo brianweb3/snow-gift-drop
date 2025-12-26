@@ -5,7 +5,11 @@ interface RewardMilestonesProps {
   milestones: Milestone[];
 }
 
-export const RewardMilestones = ({ milestones }: RewardMilestonesProps) => {
+export const RewardMilestones = ({ milestones = [] }: RewardMilestonesProps) => {
+  if (!milestones || milestones.length === 0) {
+    return null;
+  }
+
   return (
     <section className="py-8 px-4">
       <div className="max-w-lg mx-auto">
@@ -14,7 +18,7 @@ export const RewardMilestones = ({ milestones }: RewardMilestonesProps) => {
         </h2>
         
         <div className="space-y-3">
-          {milestones.map((milestone, index) => (
+          {milestones.map((milestone) => (
             <div
               key={milestone.id}
               className={`
