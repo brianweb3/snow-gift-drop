@@ -13,9 +13,8 @@ interface HeroSectionProps {
   onDisconnect: () => void;
   stats?: ProtocolStats;
   milestones?: Milestone[];
+  contractAddress: string;
 }
-
-const CONTRACT_ADDRESS = "SNOWgift...1234abcd";
 
 // X (Twitter) Icon
 const XIcon = ({ className }: { className?: string }) => (
@@ -32,7 +31,7 @@ const DEFAULT_STATS: ProtocolStats = {
   nextGiftAt: "$50k Market Cap",
 };
 
-export const HeroSection = ({ isConnected, isConnecting, walletAddress, onConnectWallet, onDisconnect, stats = DEFAULT_STATS, milestones = [] }: HeroSectionProps) => {
+export const HeroSection = ({ isConnected, isConnecting, walletAddress, onConnectWallet, onDisconnect, stats = DEFAULT_STATS, milestones = [], contractAddress }: HeroSectionProps) => {
   const safeStats = stats || DEFAULT_STATS;
   const safeMilestones = milestones || [];
   
@@ -41,7 +40,7 @@ export const HeroSection = ({ isConnected, isConnecting, walletAddress, onConnec
   };
   
   const copyContract = () => {
-    navigator.clipboard.writeText(CONTRACT_ADDRESS);
+    navigator.clipboard.writeText(contractAddress);
     toast({
       description: "Contract address copied!",
     });

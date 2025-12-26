@@ -2,7 +2,9 @@ import { Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
 
-const CONTRACT_ADDRESS = "SNOWgift123456789abcdefghijklmnop";
+interface FooterProps {
+  contractAddress: string;
+}
 
 // X (Twitter) Icon
 const XIcon = ({ className }: { className?: string }) => (
@@ -11,9 +13,9 @@ const XIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-export const Footer = () => {
+export const Footer = ({ contractAddress }: FooterProps) => {
   const copyContract = () => {
-    navigator.clipboard.writeText(CONTRACT_ADDRESS);
+    navigator.clipboard.writeText(contractAddress);
     toast({
       description: "Contract address copied!",
     });
@@ -26,7 +28,7 @@ export const Footer = () => {
         <div className="inline-flex items-center gap-2 glass rounded-lg px-4 py-2">
           <span className="text-xs text-muted-foreground">Contract:</span>
           <span className="text-xs font-mono text-foreground">
-            {CONTRACT_ADDRESS.slice(0, 8)}...{CONTRACT_ADDRESS.slice(-6)}
+            {contractAddress.slice(0, 8)}...{contractAddress.slice(-6)}
           </span>
           <Button
             variant="ghost"

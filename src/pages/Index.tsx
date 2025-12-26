@@ -26,6 +26,7 @@ const Index = () => {
   const {
     milestones,
     stats,
+    contractAddress,
     isLoading,
     updateSettings,
   } = useSettings();
@@ -65,6 +66,7 @@ const Index = () => {
           onDisconnect={disconnect}
           stats={stats}
           milestones={milestones}
+          contractAddress={contractAddress}
         />
         
         {/* Two columns: Holders Pool + Winners */}
@@ -78,7 +80,7 @@ const Index = () => {
           </div>
         </section>
         
-        <Footer />
+        <Footer contractAddress={contractAddress} />
       </main>
 
       {/* Hidden Admin Panel - Ctrl+Shift+A */}
@@ -87,6 +89,7 @@ const Index = () => {
         onClose={() => setIsAdminOpen(false)}
         milestones={milestones}
         stats={stats}
+        contractAddress={contractAddress}
         onSave={updateSettings}
       />
     </div>

@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import type { Milestone } from '@/components/AdminPanel';
 import type { ProtocolStats } from '@/components/MetricsSection';
 import type { Json } from '@/integrations/supabase/types';
+import { usePumpfunMarketCap } from './usePumpfunMarketCap';
 
 const DEFAULT_MILESTONES: Milestone[] = [
   { id: '1', cap: "$50k", reward: "0.5 SOL", completed: false },
@@ -21,10 +22,14 @@ const DEFAULT_STATS: ProtocolStats = {
   nextGiftAt: "$50k Market Cap",
 };
 
+const DEFAULT_CONTRACT_ADDRESS = 'CKaTvCdrnARQAUK2ZmAXGroXqZ8BUNHESg1Zokngpump';
+
 export const useSettings = () => {
   const [milestones, setMilestones] = useState<Milestone[]>(DEFAULT_MILESTONES);
   const [stats, setStats] = useState<ProtocolStats>(DEFAULT_STATS);
+  const [contractAddress, setContractAddress] = useState<string>(DEFAULT_CONTRACT_ADDRESS);
   const [isLoading, setIsLoading] = useState(true);
+  const { marketCap: realTimeMarketCap } = usePumpfunMarketCap(contractAddress);
 
   const fetchSettings = useCallback(async () => {
     console.log('Fetching settings from database...');
@@ -47,21 +52,37 @@ export const useSettings = () => {
       const statsData = data.stats as unknown as ProtocolStats;
       
       setMilestones(milestonesData || DEFAULT_MILESTONES);
-      setStats(statsData || DEFAULT_STATS);
+      setContractAddress(data.contract_address || DEFAULT_CONTRACT_ADDRESS);
+      // Use real-time market cap if available, otherwise use DB value
+      setStats({
+        ...(statsData || DEFAULT_STATS),
+        currentMarketCap: realTimeMarketCap || statsData?.currentMarketCap || DEFAULT_STATS.currentMarketCap,
+      });
+    } else {
+      // No data in DB, use defaults
+      setMilestones(DEFAULT_MILESTONES);
+      setContractAddress(DEFAULT_CONTRACT_ADDRESS);
+      setStats(DEFAULT_STATS);
     }
     
     setIsLoading(false);
   }, []);
 
-  const updateSettings = useCallback(async (newMilestones: Milestone[], newStats: ProtocolStats) => {
-    console.log('Updating settings in database...', { newMilestones, newStats });
+  const updateSettings = useCallback(async (newMilestones: Milestone[], newStats: ProtocolStats, newContractAddress?: string) => {
+    console.log('Updating settings in database...', { newMilestones, newStats, newContractAddress });
+    
+    const updateData: { milestones: Json; stats: Json; contract_address?: string } = {
+      milestones: newMilestones as unknown as Json,
+      stats: newStats as unknown as Json,
+    };
+    
+    if (newContractAddress !== undefined) {
+      updateData.contract_address = newContractAddress;
+    }
     
     const { error } = await supabase
       .from('settings')
-      .update({
-        milestones: newMilestones as unknown as Json,
-        stats: newStats as unknown as Json,
-      })
+      .update(updateData)
       .eq('id', 'main');
     
     if (error) {
@@ -70,6 +91,9 @@ export const useSettings = () => {
     }
     
     console.log('Settings updated successfully');
+    if (newContractAddress !== undefined) {
+      setContractAddress(newContractAddress);
+    }
     return true;
   }, []);
 
@@ -94,13 +118,21 @@ export const useSettings = () => {
         },
         (payload) => {
           console.log('Settings updated via realtime:', payload);
-          const newData = payload.new as { milestones: Json; stats: Json };
+          const newData = payload.new as { milestones: Json; stats: Json; contract_address?: string | null };
           
           if (newData.milestones) {
             setMilestones(newData.milestones as unknown as Milestone[]);
           }
+          if (newData.contract_address) {
+            setContractAddress(newData.contract_address);
+          }
           if (newData.stats) {
-            setStats(newData.stats as unknown as ProtocolStats);
+            const updatedStats = newData.stats as unknown as ProtocolStats;
+            // Keep the real-time market cap, don't overwrite it with DB value
+            setStats({
+              ...updatedStats,
+              currentMarketCap: realTimeMarketCap || updatedStats.currentMarketCap,
+            });
           }
         }
       )
@@ -110,11 +142,22 @@ export const useSettings = () => {
       console.log('Removing settings realtime subscription');
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [realTimeMarketCap]);
+
+  // Update stats with real-time market cap
+  useEffect(() => {
+    if (realTimeMarketCap) {
+      setStats(prevStats => ({
+        ...prevStats,
+        currentMarketCap: realTimeMarketCap,
+      }));
+    }
+  }, [realTimeMarketCap]);
 
   return {
     milestones,
     stats,
+    contractAddress,
     isLoading,
     updateSettings,
     refreshSettings: fetchSettings,

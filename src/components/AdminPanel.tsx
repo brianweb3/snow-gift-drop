@@ -19,7 +19,8 @@ interface AdminPanelProps {
   onClose: () => void;
   milestones: Milestone[];
   stats: ProtocolStats;
-  onSave: (milestones: Milestone[], stats: ProtocolStats) => Promise<boolean>;
+  contractAddress: string;
+  onSave: (milestones: Milestone[], stats: ProtocolStats, contractAddress?: string) => Promise<boolean>;
 }
 
 export const AdminPanel = ({ 
@@ -27,10 +28,12 @@ export const AdminPanel = ({
   onClose, 
   milestones, 
   stats,
+  contractAddress,
   onSave
 }: AdminPanelProps) => {
   const [localMilestones, setLocalMilestones] = useState<Milestone[]>(milestones);
   const [localStats, setLocalStats] = useState<ProtocolStats>(stats);
+  const [localContractAddress, setLocalContractAddress] = useState<string>(contractAddress);
   const [isSaving, setIsSaving] = useState(false);
   
   // Winner form state
@@ -45,8 +48,9 @@ export const AdminPanel = ({
     if (isOpen) {
       setLocalMilestones(milestones);
       setLocalStats(stats);
+      setLocalContractAddress(contractAddress);
     }
-  }, [milestones, stats, isOpen]);
+  }, [milestones, stats, contractAddress, isOpen]);
 
   const handleMilestoneChange = (id: string, field: keyof Milestone, value: string | boolean) => {
     setLocalMilestones(prev => 
@@ -55,6 +59,10 @@ export const AdminPanel = ({
   };
 
   const handleStatsChange = (field: keyof ProtocolStats, value: string) => {
+    // Prevent manual changes to currentMarketCap as it's auto-updated
+    if (field === 'currentMarketCap') {
+      return;
+    }
     setLocalStats(prev => ({ ...prev, [field]: value }));
   };
 
@@ -74,7 +82,7 @@ export const AdminPanel = ({
 
   const handleSave = async () => {
     setIsSaving(true);
-    const success = await onSave(localMilestones, localStats);
+    const success = await onSave(localMilestones, localStats, localContractAddress);
     setIsSaving(false);
     
     if (success) {
@@ -124,12 +132,16 @@ export const AdminPanel = ({
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-[10px] text-muted-foreground mb-1 block">Current Market Cap</label>
+                  <label className="text-[10px] text-muted-foreground mb-1 block">
+                    Current Market Cap (Auto-updated from Pump.fun)
+                  </label>
                   <Input
                     value={localStats.currentMarketCap}
                     onChange={(e) => handleStatsChange('currentMarketCap', e.target.value)}
-                    className="h-8 text-xs"
+                    className="h-8 text-xs bg-muted/50"
                     placeholder="$0"
+                    disabled
+                    title="Market cap is automatically updated from Pump.fun API in real-time"
                   />
                 </div>
                 <div>
@@ -162,8 +174,21 @@ export const AdminPanel = ({
                   />
                 </div>
               </div>
+              </div>
+              
+              <div>
+                <label className="text-[10px] text-muted-foreground mb-1 block">
+                  Contract Address (Token CA)
+                </label>
+                <Input
+                  value={localContractAddress}
+                  onChange={(e) => setLocalContractAddress(e.target.value)}
+                  className="h-8 text-xs font-mono"
+                  placeholder="Enter token contract address"
+                  title="Contract address used for fetching market cap from Pump.fun"
+                />
+              </div>
             </div>
-          </div>
 
           {/* Milestones Section */}
           <div className="space-y-3">
