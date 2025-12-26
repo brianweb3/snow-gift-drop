@@ -4,7 +4,7 @@ import { HeroSection } from '@/components/HeroSection';
 import { WalletSection } from '@/components/WalletSection';
 import { HoldersPool } from '@/components/HoldersPool';
 import { RewardMilestones } from '@/components/RewardMilestones';
-import { MetricsSection } from '@/components/MetricsSection';
+
 import { Footer } from '@/components/Footer';
 import { AdminPanel } from '@/components/AdminPanel';
 import { usePhantomWallet } from '@/hooks/usePhantomWallet';
@@ -62,6 +62,7 @@ const Index = () => {
           isConnecting={connecting}
           onConnectWallet={connect}
           onDisconnect={disconnect}
+          stats={stats}
         />
         
         <WalletSection
@@ -77,8 +78,6 @@ const Index = () => {
         />
         
         <RewardMilestones milestones={milestones} />
-        
-        <MetricsSection stats={stats} />
         
         <Footer />
       </main>
