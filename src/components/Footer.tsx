@@ -1,46 +1,31 @@
 import { Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
-
 const CONTRACT_ADDRESS = "CKaTvCdrnARQAUK2ZmAXGroXqZ8BUNHESg1Zokngpump";
 
 // X (Twitter) Icon
-const XIcon = ({ className }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+const XIcon = ({
+  className
+}: {
+  className?: string;
+}) => <svg className={className} viewBox="0 0 24 24" fill="currentColor">
     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-  </svg>
-);
-
+  </svg>;
 export const Footer = () => {
   const copyContract = () => {
     navigator.clipboard.writeText(CONTRACT_ADDRESS);
     toast({
-      description: "Contract address copied!",
+      description: "Contract address copied!"
     });
   };
-
-  return (
-    <footer className="py-8 px-4 border-t border-border/50">
+  return <footer className="py-8 px-4 border-t border-border/50">
       <div className="max-w-2xl mx-auto text-center space-y-4">
         {/* Contract */}
-        <div className="inline-flex items-center gap-2 glass rounded-lg px-4 py-2">
-          <span className="text-xs text-muted-foreground">Contract:</span>
-          <span className="text-xs font-mono text-foreground">
-            {CONTRACT_ADDRESS.slice(0, 8)}...{CONTRACT_ADDRESS.slice(-6)}
-          </span>
-          <Button variant="ghost" size="sm" onClick={copyContract} className="h-6 w-6 p-0">
-            <Copy className="w-3 h-3" />
-          </Button>
-        </div>
+        
 
         {/* Links */}
         <div className="flex items-center justify-center gap-4">
-          <a
-            href="https://x.com/snowgift"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-muted-foreground hover:text-foreground transition-colors"
-          >
+          <a href="https://x.com/snowgift" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
             <XIcon className="w-4 h-4" />
           </a>
         </div>
@@ -53,6 +38,5 @@ export const Footer = () => {
 
         <p className="text-[10px] text-muted-foreground">© 2025 SNOW GIFT. All rights reserved.</p>
       </div>
-    </footer>
-  );
+    </footer>;
 };
