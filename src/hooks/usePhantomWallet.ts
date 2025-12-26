@@ -12,7 +12,7 @@ export interface WalletData {
 }
 
 export const usePhantomWallet = () => {
-  const { publicKey, connected, connect, disconnect, connecting } = useWallet();
+  const { publicKey, connected, select, disconnect, connecting, wallets: availableWallets } = useWallet();
   const { connection } = useConnection();
   const [balance, setBalance] = useState<number>(0);
   const [wallets, setWallets] = useState<WalletData[]>([]);
@@ -110,7 +110,19 @@ export const usePhantomWallet = () => {
 
   const handleConnect = useCallback(async () => {
     try {
-      await connect();
+      // Find Phantom wallet adapter
+      const phantomWallet = availableWallets.find(
+        (wallet) => wallet.adapter.name === 'Phantom'
+      );
+      
+      if (phantomWallet) {
+        select(phantomWallet.adapter.name);
+      } else {
+        toast({
+          description: "Phantom wallet not found. Please install Phantom.",
+          variant: "destructive",
+        });
+      }
     } catch (error) {
       console.error('Error connecting wallet:', error);
       toast({
@@ -118,7 +130,7 @@ export const usePhantomWallet = () => {
         variant: "destructive",
       });
     }
-  }, [connect]);
+  }, [select, availableWallets]);
 
   const handleDisconnect = useCallback(async () => {
     try {

@@ -106,6 +106,26 @@ export const AdminPanel = ({
             <div className="glass rounded-lg p-3 space-y-3">
               <div className="grid grid-cols-2 gap-2">
                 <div>
+                  <label className="text-[10px] text-muted-foreground mb-1 block">Current Market Cap</label>
+                  <Input
+                    value={localStats.currentMarketCap}
+                    onChange={(e) => handleStatsChange('currentMarketCap', e.target.value)}
+                    className="h-8 text-xs"
+                    placeholder="$0"
+                  />
+                </div>
+                <div>
+                  <label className="text-[10px] text-muted-foreground mb-1 block">Until Next Gift</label>
+                  <Input
+                    value={localStats.untilNextGift}
+                    onChange={(e) => handleStatsChange('untilNextGift', e.target.value)}
+                    className="h-8 text-xs"
+                    placeholder="$50k"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <div>
                   <label className="text-[10px] text-muted-foreground mb-1 block">Total SOL Distributed</label>
                   <Input
                     value={localStats.totalSolDistributed}
