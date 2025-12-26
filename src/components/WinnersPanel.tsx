@@ -67,9 +67,6 @@ export const WinnersPanel = () => {
     winner.transaction_hash.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  if (winners.length === 0) {
-    return null;
-  }
 
   return (
     <section className="py-8 px-4">
@@ -100,36 +97,42 @@ export const WinnersPanel = () => {
           </div>
           
           <div className="max-h-64 overflow-y-auto">
-            {filteredWinners.map((winner) => (
-              <div
-                key={winner.id}
-                className="grid grid-cols-3 gap-2 p-3 border-b border-border/50 last:border-0 hover:bg-primary/5 transition-colors"
-              >
-                <a
-                  href={`https://solscan.io/account/${winner.wallet_address}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs text-foreground hover:text-primary transition-colors flex items-center gap-1"
-                >
-                  {formatAddress(winner.wallet_address)}
-                  <ExternalLink className="w-3 h-3 opacity-50" />
-                </a>
-                
-                <span className="text-xs text-primary font-medium text-center">
-                  {winner.reward_amount}
-                </span>
-                
-                <a
-                  href={`https://solscan.io/tx/${winner.transaction_hash}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs text-muted-foreground hover:text-primary transition-colors flex items-center justify-end gap-1"
-                >
-                  {formatTxHash(winner.transaction_hash)}
-                  <ExternalLink className="w-3 h-3 opacity-50" />
-                </a>
+            {filteredWinners.length === 0 ? (
+              <div className="p-6 text-center text-xs text-muted-foreground">
+                No winners yet
               </div>
-            ))}
+            ) : (
+              filteredWinners.map((winner) => (
+                <div
+                  key={winner.id}
+                  className="grid grid-cols-3 gap-2 p-3 border-b border-border/50 last:border-0 hover:bg-primary/5 transition-colors"
+                >
+                  <a
+                    href={`https://solscan.io/account/${winner.wallet_address}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-foreground hover:text-primary transition-colors flex items-center gap-1"
+                  >
+                    {formatAddress(winner.wallet_address)}
+                    <ExternalLink className="w-3 h-3 opacity-50" />
+                  </a>
+                  
+                  <span className="text-xs text-primary font-medium text-center">
+                    {winner.reward_amount}
+                  </span>
+                  
+                  <a
+                    href={`https://solscan.io/tx/${winner.transaction_hash}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-muted-foreground hover:text-primary transition-colors flex items-center justify-end gap-1"
+                  >
+                    {formatTxHash(winner.transaction_hash)}
+                    <ExternalLink className="w-3 h-3 opacity-50" />
+                  </a>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>
