@@ -1,13 +1,15 @@
-import { Wallet, Copy } from 'lucide-react';
+import { Wallet, Copy, Coins, Send, Users, TrendingUp, Target } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { SnowGlobe } from './SnowGlobe';
 import { toast } from '@/hooks/use-toast';
+import type { ProtocolStats } from './MetricsSection';
 
 interface HeroSectionProps {
   isConnected: boolean;
   isConnecting: boolean;
   onConnectWallet: () => void;
   onDisconnect: () => void;
+  stats?: ProtocolStats;
 }
 
 const CONTRACT_ADDRESS = "SNOWgift...1234abcd";
@@ -19,13 +21,32 @@ const XIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-export const HeroSection = ({ isConnected, isConnecting, onConnectWallet, onDisconnect }: HeroSectionProps) => {
+const DEFAULT_STATS: ProtocolStats = {
+  totalSolDistributed: "0 SOL",
+  totalRewardsSent: "0",
+  currentRewardPool: "0 SOL",
+  totalUniqueWinners: "0",
+  currentMarketCap: "$0",
+  untilNextGift: "$50k",
+};
+
+export const HeroSection = ({ isConnected, isConnecting, onConnectWallet, onDisconnect, stats = DEFAULT_STATS }: HeroSectionProps) => {
+  const safeStats = stats || DEFAULT_STATS;
+  
   const copyContract = () => {
     navigator.clipboard.writeText(CONTRACT_ADDRESS);
     toast({
       description: "Contract address copied!",
     });
   };
+
+  const metrics = [
+    { icon: TrendingUp, label: "Market Cap", value: safeStats.currentMarketCap },
+    { icon: Target, label: "Until Gift", value: safeStats.untilNextGift },
+    { icon: Coins, label: "Distributed", value: safeStats.totalSolDistributed },
+    { icon: Send, label: "Rewards Sent", value: safeStats.totalRewardsSent },
+    { icon: Users, label: "Winners", value: safeStats.totalUniqueWinners },
+  ];
 
   return (
     <section className="relative py-12 md:py-20 px-4">
@@ -39,8 +60,23 @@ export const HeroSection = ({ isConnected, isConnecting, onConnectWallet, onDisc
         </p>
 
         {/* Snow Globe */}
-        <div className="mb-10 md:mb-14">
+        <div className="mb-6">
           <SnowGlobe />
+        </div>
+
+        {/* Protocol Stats */}
+        <div className="grid grid-cols-3 md:grid-cols-5 gap-2 mb-8">
+          {metrics.map((metric, index) => (
+            <div key={index} className="glass rounded-lg p-2 md:p-3 text-center">
+              <metric.icon className="w-4 h-4 text-primary mx-auto mb-1" strokeWidth={1.5} />
+              <p className="text-sm md:text-base font-semibold text-foreground">
+                {metric.value}
+              </p>
+              <p className="text-[8px] md:text-[10px] text-muted-foreground uppercase tracking-wider">
+                {metric.label}
+              </p>
+            </div>
+          ))}
         </div>
 
         {/* Buttons */}
