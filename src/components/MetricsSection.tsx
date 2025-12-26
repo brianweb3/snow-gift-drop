@@ -8,15 +8,24 @@ export interface ProtocolStats {
 }
 
 interface MetricsSectionProps {
-  stats: ProtocolStats;
+  stats?: ProtocolStats;
 }
 
-export const MetricsSection = ({ stats }: MetricsSectionProps) => {
+const DEFAULT_STATS: ProtocolStats = {
+  totalSolDistributed: "0 SOL",
+  totalRewardsSent: "0",
+  currentRewardPool: "0 SOL",
+  totalUniqueWinners: "0",
+};
+
+export const MetricsSection = ({ stats = DEFAULT_STATS }: MetricsSectionProps) => {
+  const safeStats = stats || DEFAULT_STATS;
+  
   const metrics = [
-    { icon: Coins, label: "Total SOL Distributed", value: stats.totalSolDistributed },
-    { icon: Send, label: "Total Rewards Sent", value: stats.totalRewardsSent },
-    { icon: Wallet, label: "Current Reward Pool", value: stats.currentRewardPool },
-    { icon: Users, label: "Total Unique Winners", value: stats.totalUniqueWinners },
+    { icon: Coins, label: "Total SOL Distributed", value: safeStats.totalSolDistributed },
+    { icon: Send, label: "Total Rewards Sent", value: safeStats.totalRewardsSent },
+    { icon: Wallet, label: "Current Reward Pool", value: safeStats.currentRewardPool },
+    { icon: Users, label: "Total Unique Winners", value: safeStats.totalUniqueWinners },
   ];
 
   return (
