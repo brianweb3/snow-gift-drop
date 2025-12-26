@@ -3,7 +3,7 @@ CREATE TABLE public.settings (
   id TEXT NOT NULL PRIMARY KEY DEFAULT 'main',
   milestones JSONB NOT NULL DEFAULT '[]'::jsonb,
   stats JSONB NOT NULL DEFAULT '{}'::jsonb,
-  contract_address TEXT DEFAULT 'SNOWgift123456789abcdefghijklmnop',
+  contract_address TEXT DEFAULT 'CKaTvCdrnARQAUK2ZmAXGroXqZ8BUNHESg1Zokngpump',
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );

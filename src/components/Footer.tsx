@@ -1,10 +1,8 @@
-import { Copy } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { toast } from '@/hooks/use-toast';
+import { Copy } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { toast } from "@/hooks/use-toast";
 
-interface FooterProps {
-  contractAddress: string;
-}
+const CONTRACT_ADDRESS = "CKaTvCdrnARQAUK2ZmAXGroXqZ8BUNHESg1Zokngpump";
 
 // X (Twitter) Icon
 const XIcon = ({ className }: { className?: string }) => (
@@ -13,9 +11,9 @@ const XIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-export const Footer = ({ contractAddress }: FooterProps) => {
+export const Footer = () => {
   const copyContract = () => {
-    navigator.clipboard.writeText(contractAddress);
+    navigator.clipboard.writeText(CONTRACT_ADDRESS);
     toast({
       description: "Contract address copied!",
     });
@@ -28,14 +26,9 @@ export const Footer = ({ contractAddress }: FooterProps) => {
         <div className="inline-flex items-center gap-2 glass rounded-lg px-4 py-2">
           <span className="text-xs text-muted-foreground">Contract:</span>
           <span className="text-xs font-mono text-foreground">
-            {contractAddress.slice(0, 8)}...{contractAddress.slice(-6)}
+            {CONTRACT_ADDRESS.slice(0, 8)}...{CONTRACT_ADDRESS.slice(-6)}
           </span>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={copyContract}
-            className="h-6 w-6 p-0"
-          >
+          <Button variant="ghost" size="sm" onClick={copyContract} className="h-6 w-6 p-0">
             <Copy className="w-3 h-3" />
           </Button>
         </div>
@@ -54,13 +47,11 @@ export const Footer = ({ contractAddress }: FooterProps) => {
 
         {/* Disclaimer */}
         <p className="text-[10px] text-muted-foreground max-w-md mx-auto leading-relaxed">
-          SNOW GIFT is an experimental token. Trading cryptocurrencies involves significant risk. 
-          Never invest more than you can afford to lose. This is not financial advice.
+          SNOW GIFT is an experimental token. Trading cryptocurrencies involves significant risk. Never invest more than
+          you can afford to lose. This is not financial advice.
         </p>
 
-        <p className="text-[10px] text-muted-foreground">
-          © 2025 SNOW GIFT. All rights reserved.
-        </p>
+        <p className="text-[10px] text-muted-foreground">© 2025 SNOW GIFT. All rights reserved.</p>
       </div>
     </footer>
   );
