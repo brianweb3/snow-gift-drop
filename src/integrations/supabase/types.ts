@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      settings: {
+        Row: {
+          contract_address: string | null
+          created_at: string
+          id: string
+          milestones: Json
+          stats: Json
+          updated_at: string
+        }
+        Insert: {
+          contract_address?: string | null
+          created_at?: string
+          id?: string
+          milestones?: Json
+          stats?: Json
+          updated_at?: string
+        }
+        Update: {
+          contract_address?: string | null
+          created_at?: string
+          id?: string
+          milestones?: Json
+          stats?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
       wallets: {
         Row: {
           created_at: string
