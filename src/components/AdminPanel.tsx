@@ -104,6 +104,15 @@ export const AdminPanel = ({
             <p className="text-xs text-muted-foreground font-medium">Protocol Stats</p>
             
             <div className="glass rounded-lg p-3 space-y-3">
+              <div>
+                <label className="text-[10px] text-muted-foreground mb-1 block">Next Gift At (Snow Globe)</label>
+                <Input
+                  value={localStats.nextGiftAt}
+                  onChange={(e) => handleStatsChange('nextGiftAt', e.target.value)}
+                  className="h-8 text-xs"
+                  placeholder="$50k Market Cap"
+                />
+              </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <label className="text-[10px] text-muted-foreground mb-1 block">Current Market Cap</label>

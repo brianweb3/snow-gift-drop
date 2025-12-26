@@ -1,6 +1,10 @@
 import { Gift, Snowflake } from 'lucide-react';
 
-export const SnowGlobe = () => {
+interface SnowGlobeProps {
+  nextGiftAt?: string;
+}
+
+export const SnowGlobe = ({ nextGiftAt = "$50k Market Cap" }: SnowGlobeProps) => {
   return (
     <div className="relative w-64 h-64 md:w-80 md:h-80 mx-auto">
       {/* Globe outer ring */}
@@ -32,7 +36,7 @@ export const SnowGlobe = () => {
         {/* Text content */}
         <div className="relative z-10 text-center px-4">
           <p className="text-xs text-muted-foreground mb-1">Next Gift at</p>
-          <p className="text-lg md:text-xl font-semibold text-foreground">$150k Market Cap</p>
+          <p className="text-lg md:text-xl font-semibold text-foreground">{nextGiftAt}</p>
         </div>
       </div>
       
