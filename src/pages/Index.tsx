@@ -7,6 +7,7 @@ import { RewardMilestones } from '@/components/RewardMilestones';
 import { MetricsSection, type ProtocolStats } from '@/components/MetricsSection';
 import { Footer } from '@/components/Footer';
 import { AdminPanel, type Milestone } from '@/components/AdminPanel';
+import { usePhantomWallet } from '@/hooks/usePhantomWallet';
 
 const DEFAULT_MILESTONES: Milestone[] = [
   { id: '1', cap: "$50k", reward: "0.5 SOL", completed: false },
@@ -25,15 +26,23 @@ const DEFAULT_STATS: ProtocolStats = {
 };
 
 const Index = () => {
-  const [isConnected, setIsConnected] = useState(false);
-  const [walletAddress, setWalletAddress] = useState("");
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [milestones, setMilestones] = useState<Milestone[]>(DEFAULT_MILESTONES);
   const [stats, setStats] = useState<ProtocolStats>(DEFAULT_STATS);
+  
+  const { 
+    publicKey, 
+    connected, 
+    connecting, 
+    balance, 
+    wallets, 
+    connect, 
+    disconnect 
+  } = usePhantomWallet();
 
   // Keyboard shortcut: Ctrl+Shift+A
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+    if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a' || e.key === 'Ф' || e.key === 'ф')) {
       e.preventDefault();
       setIsAdminOpen(prev => !prev);
     }
@@ -44,35 +53,29 @@ const Index = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleKeyDown]);
 
-  const handleConnectWallet = () => {
-    if (!isConnected) {
-      const mockAddress = "8xKqwerty1234567890abcdef4nRt";
-      setWalletAddress(mockAddress);
-      setIsConnected(true);
-    } else {
-      setWalletAddress("");
-      setIsConnected(false);
-    }
-  };
-
   return (
     <div className="min-h-screen winter-gradient relative">
       <SnowfallAnimation />
       
       <main className="relative z-10">
         <HeroSection 
-          isConnected={isConnected} 
-          onConnectWallet={handleConnectWallet} 
+          isConnected={connected}
+          isConnecting={connecting}
+          onConnectWallet={connect}
+          onDisconnect={disconnect}
         />
         
         <WalletSection
-          isConnected={isConnected}
-          walletAddress={walletAddress}
-          balance={125000}
-          isEligible={true}
+          isConnected={connected}
+          walletAddress={publicKey || ""}
+          balance={balance}
+          isEligible={balance > 0}
         />
         
-        <HoldersPool connectedWallet={isConnected ? walletAddress : null} />
+        <HoldersPool 
+          wallets={wallets} 
+          connectedWallet={publicKey} 
+        />
         
         <RewardMilestones milestones={milestones} />
         

@@ -5,7 +5,9 @@ import { toast } from '@/hooks/use-toast';
 
 interface HeroSectionProps {
   isConnected: boolean;
+  isConnecting: boolean;
   onConnectWallet: () => void;
+  onDisconnect: () => void;
 }
 
 const CONTRACT_ADDRESS = "SNOWgift...1234abcd";
@@ -17,7 +19,7 @@ const XIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-export const HeroSection = ({ isConnected, onConnectWallet }: HeroSectionProps) => {
+export const HeroSection = ({ isConnected, isConnecting, onConnectWallet, onDisconnect }: HeroSectionProps) => {
   const copyContract = () => {
     navigator.clipboard.writeText(CONTRACT_ADDRESS);
     toast({
@@ -44,12 +46,13 @@ export const HeroSection = ({ isConnected, onConnectWallet }: HeroSectionProps) 
         {/* Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
           <Button
-            onClick={onConnectWallet}
+            onClick={isConnected ? onDisconnect : onConnectWallet}
             variant={isConnected ? "secondary" : "default"}
             className="w-full sm:w-auto gap-2"
+            disabled={isConnecting}
           >
             <Wallet className="w-4 h-4" />
-            {isConnected ? "Connected" : "Connect Wallet"}
+            {isConnecting ? "Connecting..." : isConnected ? "Disconnect" : "Connect Wallet"}
           </Button>
           
           <Button
@@ -64,11 +67,10 @@ export const HeroSection = ({ isConnected, onConnectWallet }: HeroSectionProps) 
           <Button
             variant="ghost"
             asChild
-            className="w-full sm:w-auto gap-2"
+            className="w-full sm:w-auto p-2"
           >
             <a href="https://x.com/snowgift" target="_blank" rel="noopener noreferrer">
-              <XIcon className="w-4 h-4" />
-              X
+              <XIcon className="w-5 h-5" />
             </a>
           </Button>
         </div>

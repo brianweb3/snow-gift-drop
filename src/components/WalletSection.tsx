@@ -1,4 +1,4 @@
-import { Check, AlertCircle } from 'lucide-react';
+import { Check, AlertCircle, ExternalLink } from 'lucide-react';
 
 interface WalletSectionProps {
   isConnected: boolean;
@@ -8,7 +8,11 @@ interface WalletSectionProps {
 }
 
 export const WalletSection = ({ isConnected, walletAddress, balance, isEligible }: WalletSectionProps) => {
-  if (!isConnected) return null;
+  if (!isConnected || !walletAddress) return null;
+
+  const formatAddress = (address: string) => {
+    return `${address.slice(0, 6)}...${address.slice(-4)}`;
+  };
 
   return (
     <section className="py-8 px-4">
@@ -19,15 +23,25 @@ export const WalletSection = ({ isConnected, walletAddress, balance, isEligible 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs text-muted-foreground">Address</span>
-              <span className="text-xs font-mono text-foreground">
-                {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono text-foreground">
+                  {formatAddress(walletAddress)}
+                </span>
+                <a
+                  href={`https://solscan.io/account/${walletAddress}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
             </div>
             
             <div className="flex items-center justify-between">
-              <span className="text-xs text-muted-foreground">SNOW Balance</span>
+              <span className="text-xs text-muted-foreground">SOL Balance</span>
               <span className="text-sm font-medium text-foreground">
-                {balance.toLocaleString()} SNOW
+                {balance.toFixed(4)} SOL
               </span>
             </div>
             
