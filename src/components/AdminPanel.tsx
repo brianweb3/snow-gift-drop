@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
-import { X, Save, Plus, Trash2, Settings } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { X, Save, Plus, Trash2, Settings, Trophy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { toast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 import type { ProtocolStats } from './MetricsSection';
 
 export interface Milestone {
@@ -31,6 +32,14 @@ export const AdminPanel = ({
   const [localMilestones, setLocalMilestones] = useState<Milestone[]>(milestones);
   const [localStats, setLocalStats] = useState<ProtocolStats>(stats);
   const [isSaving, setIsSaving] = useState(false);
+  
+  // Winner form state
+  const [newWinner, setNewWinner] = useState({
+    wallet_address: '',
+    transaction_hash: '',
+    reward_amount: '',
+  });
+  const [isAddingWinner, setIsAddingWinner] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -211,6 +220,71 @@ export const AdminPanel = ({
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* Add Winner Section */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <Trophy className="w-4 h-4 text-primary" />
+              <p className="text-xs text-muted-foreground font-medium">Add Winner</p>
+            </div>
+
+            <div className="glass rounded-lg p-3 space-y-3">
+              <div>
+                <label className="text-[10px] text-muted-foreground mb-1 block">Wallet Address</label>
+                <Input
+                  value={newWinner.wallet_address}
+                  onChange={(e) => setNewWinner(prev => ({ ...prev, wallet_address: e.target.value }))}
+                  className="h-8 text-xs"
+                  placeholder="Wallet address"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="text-[10px] text-muted-foreground mb-1 block">Transaction Hash</label>
+                  <Input
+                    value={newWinner.transaction_hash}
+                    onChange={(e) => setNewWinner(prev => ({ ...prev, transaction_hash: e.target.value }))}
+                    className="h-8 text-xs"
+                    placeholder="Transaction hash"
+                  />
+                </div>
+                <div>
+                  <label className="text-[10px] text-muted-foreground mb-1 block">Reward Amount</label>
+                  <Input
+                    value={newWinner.reward_amount}
+                    onChange={(e) => setNewWinner(prev => ({ ...prev, reward_amount: e.target.value }))}
+                    className="h-8 text-xs"
+                    placeholder="0.5 SOL"
+                  />
+                </div>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full h-8 text-xs gap-1"
+                disabled={isAddingWinner || !newWinner.wallet_address || !newWinner.transaction_hash || !newWinner.reward_amount}
+                onClick={async () => {
+                  setIsAddingWinner(true);
+                  const { error } = await supabase.from('winners').insert({
+                    wallet_address: newWinner.wallet_address,
+                    transaction_hash: newWinner.transaction_hash,
+                    reward_amount: newWinner.reward_amount,
+                  });
+                  setIsAddingWinner(false);
+                  
+                  if (error) {
+                    toast({ description: "Failed to add winner", variant: "destructive" });
+                  } else {
+                    toast({ description: "Winner added!" });
+                    setNewWinner({ wallet_address: '', transaction_hash: '', reward_amount: '' });
+                  }
+                }}
+              >
+                <Plus className="w-3 h-3" />
+                {isAddingWinner ? 'Adding...' : 'Add Winner'}
+              </Button>
             </div>
           </div>
         </div>

@@ -4,7 +4,7 @@ import { HeroSection } from '@/components/HeroSection';
 import { WalletSection } from '@/components/WalletSection';
 import { HoldersPool } from '@/components/HoldersPool';
 import { RewardMilestones } from '@/components/RewardMilestones';
-
+import { WinnersPanel } from '@/components/WinnersPanel';
 import { Footer } from '@/components/Footer';
 import { AdminPanel } from '@/components/AdminPanel';
 import { usePhantomWallet } from '@/hooks/usePhantomWallet';
@@ -78,6 +78,8 @@ const Index = () => {
         />
         
         <RewardMilestones milestones={milestones} />
+        
+        <WinnersPanel />
         
         <Footer />
       </main>
