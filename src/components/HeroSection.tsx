@@ -1,8 +1,9 @@
-import { Wallet, Copy, Coins, Send, Users, TrendingUp } from 'lucide-react';
+import { Wallet, Copy, Coins, Send, Users, TrendingUp, Check, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { SnowGlobe } from './SnowGlobe';
 import { toast } from '@/hooks/use-toast';
 import type { ProtocolStats } from './MetricsSection';
+import type { Milestone } from './AdminPanel';
 
 interface HeroSectionProps {
   isConnected: boolean;
@@ -11,6 +12,7 @@ interface HeroSectionProps {
   onConnectWallet: () => void;
   onDisconnect: () => void;
   stats?: ProtocolStats;
+  milestones?: Milestone[];
 }
 
 const CONTRACT_ADDRESS = "SNOWgift...1234abcd";
@@ -30,8 +32,9 @@ const DEFAULT_STATS: ProtocolStats = {
   nextGiftAt: "$50k Market Cap",
 };
 
-export const HeroSection = ({ isConnected, isConnecting, walletAddress, onConnectWallet, onDisconnect, stats = DEFAULT_STATS }: HeroSectionProps) => {
+export const HeroSection = ({ isConnected, isConnecting, walletAddress, onConnectWallet, onDisconnect, stats = DEFAULT_STATS, milestones = [] }: HeroSectionProps) => {
   const safeStats = stats || DEFAULT_STATS;
+  const safeMilestones = milestones || [];
   
   const formatAddress = (address: string) => {
     return `${address.slice(0, 4)}...${address.slice(-4)}`;
@@ -68,7 +71,7 @@ export const HeroSection = ({ isConnected, isConnecting, walletAddress, onConnec
         </div>
 
         {/* Protocol Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
           {metrics.map((metric, index) => (
             <div key={index} className="glass rounded-lg p-2 md:p-3 text-center">
               <metric.icon className="w-4 h-4 text-primary mx-auto mb-1" strokeWidth={1.5} />
@@ -81,6 +84,35 @@ export const HeroSection = ({ isConnected, isConnecting, walletAddress, onConnec
             </div>
           ))}
         </div>
+
+        {/* Reward Milestones - Horizontal Progress */}
+        {safeMilestones.length > 0 && (
+          <div className="mb-8">
+            <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-3">Reward Milestones</p>
+            <div className="flex items-center justify-center gap-1 md:gap-2 flex-wrap">
+              {safeMilestones.map((milestone, index) => (
+                <div
+                  key={milestone.id}
+                  className={`
+                    flex items-center gap-1 px-2 py-1 md:px-3 md:py-1.5 rounded-full text-[10px] md:text-xs transition-all
+                    ${milestone.completed 
+                      ? 'bg-primary text-primary-foreground' 
+                      : 'glass text-muted-foreground'
+                    }
+                  `}
+                >
+                  {milestone.completed ? (
+                    <Check className="w-3 h-3" />
+                  ) : (
+                    <Lock className="w-2.5 h-2.5" />
+                  )}
+                  <span className="font-medium">{milestone.cap}</span>
+                  <span className="hidden md:inline opacity-70">→ {milestone.reward}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">

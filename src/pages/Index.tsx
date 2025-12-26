@@ -3,7 +3,7 @@ import { SnowfallAnimation } from '@/components/SnowfallAnimation';
 import { HeroSection } from '@/components/HeroSection';
 
 import { HoldersPool } from '@/components/HoldersPool';
-import { RewardMilestones } from '@/components/RewardMilestones';
+
 import { WinnersPanel } from '@/components/WinnersPanel';
 import { Footer } from '@/components/Footer';
 import { AdminPanel } from '@/components/AdminPanel';
@@ -64,6 +64,7 @@ const Index = () => {
           onConnectWallet={connect}
           onDisconnect={disconnect}
           stats={stats}
+          milestones={milestones}
         />
         
         {/* Two columns: Holders Pool + Winners */}
@@ -76,8 +77,6 @@ const Index = () => {
             <WinnersPanel />
           </div>
         </section>
-        
-        <RewardMilestones milestones={milestones} />
         
         <Footer />
       </main>
