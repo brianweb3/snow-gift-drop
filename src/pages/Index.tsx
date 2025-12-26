@@ -77,9 +77,9 @@ const Index = () => {
           connectedWallet={publicKey} 
         />
         
-        <RewardMilestones milestones={milestones} />
-        
         <WinnersPanel />
+        
+        <RewardMilestones milestones={milestones} />
         
         <Footer />
       </main>
