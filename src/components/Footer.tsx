@@ -32,11 +32,11 @@ export const Footer = () => {
 
         {/* Disclaimer */}
         <p className="text-[10px] text-muted-foreground max-w-md mx-auto leading-relaxed">
-          SNOW GIFT is an experimental token. Trading cryptocurrencies involves significant risk. Never invest more than
+          SNOW GIFT PROTOCOL is an experimental token. Trading cryptocurrencies involves significant risk. Never invest more than
           you can afford to lose. This is not financial advice.
         </p>
 
-        <p className="text-[10px] text-muted-foreground">© 2025 SNOW GIFT. All rights reserved.</p>
+        <p className="text-[10px] text-muted-foreground">© 2025 SNOW GIFT PROTOCOL. All rights reserved.</p>
       </div>
     </footer>;
 };
