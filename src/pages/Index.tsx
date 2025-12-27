@@ -80,7 +80,7 @@ const Index = () => {
           </div>
         </section>
         
-        <Footer contractAddress={contractAddress} />
+        <Footer />
       </main>
 
       {/* Hidden Admin Panel - Ctrl+Shift+A */}
