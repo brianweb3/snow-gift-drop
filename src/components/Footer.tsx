@@ -25,7 +25,7 @@ export const Footer = () => {
 
         {/* Links */}
         <div className="flex items-center justify-center gap-4">
-          <a href="https://x.com/snowgift" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+          <a href="https://x.com/i/communities/2004897909502857453" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
             <XIcon className="w-4 h-4" />
           </a>
         </div>
