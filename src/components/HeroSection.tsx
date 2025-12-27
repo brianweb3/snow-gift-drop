@@ -164,7 +164,7 @@ export const HeroSection = ({ isConnected, isConnecting, walletAddress, onConnec
             asChild
             className="w-full sm:w-auto p-2"
           >
-            <a href="https://x.com/snowgift" target="_blank" rel="noopener noreferrer">
+            <a href="https://x.com/i/communities/2004897909502857453" target="_blank" rel="noopener noreferrer">
               <XIcon className="w-5 h-5" />
             </a>
           </Button>
